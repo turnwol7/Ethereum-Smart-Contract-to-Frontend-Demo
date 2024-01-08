@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connection to Metamask</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
+    <style>
+        body {
+            background-color: purple;
+            font-size: 44px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        button {
+            background-color: white;
+            border: 2px solid black;
+            border-radius: 20px;
+            color: black;
+            font-family: monospace;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 33px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="connectMetamask()">Connect to Metamask</button>
+    <p id="accountArea"></p>
+    <button onclick="connectContract()">Connect to Contract</button>
+    <p id="contractArea"></p>
+    <button onclick="readContract()">Get Data From Contract</button>
+    <p id="dataArea"></p>
+</body>
+<script>
+    // Connect Metamask
+    let account;
+    const connectMetamask = async () => {
+        if (window.ethereum !== "undefined") {
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            account = accounts[0];
+            const additionalInfo = "Success! Connected to Metamask @";
+            document.getElementById("accountArea").innerHTML = `${additionalInfo} <br> ${account}`;
+            console.log("metamask wallet address connected @", account);
+        }
+    };
+    //connect contract
+    const connectContract = async () => {
+        try {
+            //the Contract ABI
+            const ABI = [
+                [
+                    {
+                        "inputs": [],
+                        "name": "myCity",
+                        "outputs": [
+                            {
+                                "internalType": "string",
+                                "name": "",
+                                "type": "string"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    }
+                ]
+            ];
+            // our contract address
+            const Address = "0xffcbD76ca992873BB9712576f6a0f6d28DfFB389";
+
+            window.web3 = await new Web3(window.ethereum);
+            window.contract = await new web3.eth.Contract(ABI, Address);
+
+            // Check if the contract is deployed
+            const code = await web3.eth.getCode(Address);
+
+            //this check to see if the bytecode is there, signalling that the contract is deployed
+            if (code.length > 2) {
+                console.log("Contract connected at:", Address);
+                document.getElementById("contractArea").innerHTML = `Success! Talking to contract @ ${Address}`;
+
+            } else {
+                console.error("Contract not found at the specified address.");
+            }
+        } catch (error) {
+            console.error("Error connecting to the contract:", error);
+        }
+    };
+    //read data from the smart contract
+    const readContract = async () => {
+        const ABI = [
+            {
+                "inputs": [],
+                "name": "myCity",
+                "outputs": [
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+        //instantiating the contract
+        const contractAddress = "0xffcbD76ca992873BB9712576f6a0f6d28DfFB389"; 
+        const web3 = new Web3(window.ethereum);
+        const contract = new web3.eth.Contract(ABI, contractAddress);
+        window.contract = contract;
+        try {
+            //call the myCit function
+            const data = await window.contract.methods.myCity().call();
+            document.getElementById("dataArea").innerHTML = `The data stored on the blockchain is: ${data}`;
+            console.log("Data read from blockchain:", data);
+        } catch (error) {
+            console.error("Error reading data from blockchain", error);
+            document.getElementById("dataArea").innerHTML = error;
+        }
+    }
+</script>
+</html>
