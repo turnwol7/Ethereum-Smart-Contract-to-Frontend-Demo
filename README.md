@@ -8,9 +8,9 @@ Get data from Contract
 
 Using Node, Express, Remix, Solidity, Metamask and HTML we can prove the very basic functionality of interacting with smart contracts on the Ethereum Sepolia Test Network.
 
--Our Metamask wallet address is connected and displayed.
--We can deploy to the Sepolia testnet and view on Etherscan.
--We connect to the contract address on our front end.
+-Our Metamask wallet address is connected and displayed.  
+-We can deploy to the Sepolia testnet and view on Etherscan.  
+-We connect to the contract address on our front end.  
 -We can get the contract data from the blockchain and display it back on our frontend.
 
 This was a tutorial that I found online but I had to modify a lot of the code to get it to work. 
