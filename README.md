@@ -2,8 +2,8 @@
 
 A web3 interface that connects to an Ethereum contract.
 
-Connect to Metamask
-Connect to Contract
+Connect to Metamask  
+Connect to Contract  
 Get data from Contract
 
 Using Node, Express, Remix, Solidity, Metamask and HTML we can prove the very basic functionality of interacting with smart contracts on the Ethereum Sepolia Test Network.
